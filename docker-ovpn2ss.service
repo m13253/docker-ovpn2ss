@@ -3,7 +3,7 @@ Description=Docker ovpn2ss
 After=docker.service
 
 [Service]
-ExecStartPre=-/usr/bin/env docker run -d -p 8388:8388/tcp -p 8388:8388/udp --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --device=/dev/net/tun --name ovpn2ss ovpn2ss
+ExecStartPre=-/usr/bin/env docker run -d -p 8388:8388/tcp -p 8388:8388/udp --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --device=/dev/net/tun --name ovpn2ss --rm ovpn2ss
 ExecStart=/usr/bin/env docker start -a ovpn2ss
 ExecStop=/usr/bin/env docker stop ovpn2ss
 Restart=always
