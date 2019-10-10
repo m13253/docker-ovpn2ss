@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cp /resolv-vpn.sh /etc/resolv.conf
+cp /resolv-vpn.conf /etc/resolv.conf
 supervisorctl start go-shadowsocks2
