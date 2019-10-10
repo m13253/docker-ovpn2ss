@@ -1,0 +1,14 @@
+[Unit]
+Description=Docker ovpn2ss
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/env docker run -d --cap-add=NET_ADMIN -p 8388:8388/tcp -p 8388:8388/udp --device=/dev/net/tun --name ovpn2ss ovpn2ss
+ExecStart=/usr/bin/env docker start -a ovpn2ss
+ExecStop=/usr/bin/env docker stop ovpn2ss
+Restart=always
+RestartSec=3
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
