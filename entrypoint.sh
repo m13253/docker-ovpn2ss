@@ -5,6 +5,7 @@ GATEWAY_IPv6="$(ip -6 route get 2001:db8::1 dev eth0 | grep -o 'via\s\S*')"
 
 # (Optionally) disable IPv6 if the VPN provider does not have IPv6 connectivity
 #ip -6 addr flush dev eth0
+#ip -6 route flush all
 if [ -n "$GATEWAY_IPv4" ]
 then
     ip -4 route add default $GATEWAY_IPv4 dev eth0 table 8388
