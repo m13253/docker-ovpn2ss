@@ -18,18 +18,24 @@ then
 fi
 
 nft add table inet mangle
-nft add chain inet mangle input '{' type filter hook input priority mangle ';' '}'
-nft add chain inet mangle output '{' type route hook output priority mangle ';' policy accept ';' '}'
+nft add chain inet mangle input { type filter hook input priority mangle \; }
 nft add rule inet mangle input iifname "eth0" counter meta mark set 0x8388
 nft add rule inet mangle input counter ct mark set mark
-nft add rule inet mangle output counter meta mark set ct mark
+
+nft add table ip mangle
+nft add chain ip mangle output { type route hook output priority mangle \; policy accept \; }
+nft add rule ip mangle output counter meta mark set ct mark
+
+nft add table ip6 mangle
+nft add chain ip6 mangle output { type route hook output priority mangle \; policy accept \; }
+nft add rule ip6 mangle output counter meta mark set ct mark
 
 nft add table ip nat
-nft add chain ip nat prerouting '{' type nat hook prerouting priority dstnat ';' policy accept ';' '}'
+nft add chain ip nat prerouting { type nat hook prerouting priority dstnat \; policy accept \; }
 nft add rule ip nat prerouting iifname "eth0" meta l4proto udp fib daddr type local counter redirect
 
 nft add table ip6 nat
-nft add chain ip6 nat prerouting '{' type nat hook prerouting priority dstnat ';' policy accept ';' '}'
+nft add chain ip6 nat prerouting { type nat hook prerouting priority dstnat \; policy accept \; }
 nft add rule ip6 nat prerouting iifname "eth0" meta l4proto udp fib daddr type local counter redirect
 
 umount /etc/resolv.conf
