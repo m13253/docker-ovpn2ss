@@ -40,4 +40,4 @@ nft add rule ip6 nat prerouting iifname "eth0" meta l4proto udp fib daddr type l
 
 umount /etc/resolv.conf
 cp /resolv.conf /etc/resolv.conf
-exec supervisord -n -c /etc/supervisord.conf
+exec supervisord -c /etc/supervisord.conf
