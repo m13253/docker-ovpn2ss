@@ -9,12 +9,14 @@ GATEWAY_IPv6="$(ip -6 route get 2001:db8::1 dev eth0 | grep -o 'via\s\S*')"
 if [ -n "$GATEWAY_IPv4" ]
 then
     ip -4 route add default $GATEWAY_IPv4 dev eth0 table 8388
-    ip -4 rule add fwmark 0x8388 table 8388 priority 8388
+    ip -4 rule add ipproto udp sport 8388 table 8388 priority 8388
+    ip -4 rule add fwmark 0x8388 table 8388 priority 8389
 fi
 if [ -n "$GATEWAY_IPv6" ]
 then
     ip -4 route add default $GATEWAY_IPv6 dev eth0 table 8388
-    ip -6 rule add fwmark 0x8388 table 8388 priority 8388
+    ip -6 rule add ipproto udp sport 8388 table 8388 priority 8388
+    ip -6 rule add fwmark 0x8388 table 8388 priority 8389
 fi
 
 nft add table inet mangle
@@ -30,13 +32,10 @@ nft add table ip6 mangle
 nft add chain ip6 mangle output { type route hook output priority mangle \; policy accept \; }
 nft add rule ip6 mangle output counter meta mark set ct mark
 
-nft add table ip nat
-nft add chain ip nat prerouting { type nat hook prerouting priority dstnat \; policy accept \; }
-nft add rule ip nat prerouting iifname "eth0" meta l4proto udp fib daddr type local counter redirect
-
-nft add table ip6 nat
-nft add chain ip6 nat prerouting { type nat hook prerouting priority dstnat \; policy accept \; }
-nft add rule ip6 nat prerouting iifname "eth0" meta l4proto udp fib daddr type local counter redirect
+nft add table inet filter
+nft add chain inet filter input { type filter hook input priority filter \; policy accept \; }
+nft add rule inet filter input iifname != "eth0" tcp dport 8388 counter reject with tcp reset
+nft add rule inet filter input iifname != "eth0" udp dport 8388 counter reject
 
 umount /etc/resolv.conf
 cp /resolv.conf /etc/resolv.conf
