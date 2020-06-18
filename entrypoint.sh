@@ -34,6 +34,7 @@ nft add rule ip6 mangle output counter meta mark set ct mark
 
 nft add table inet filter
 nft add chain inet filter input { type filter hook input priority filter \; policy accept \; }
+nft add rule inet filter input iifname != "eth0" tcp dport 8080 counter reject with tcp reset
 nft add rule inet filter input iifname != "eth0" tcp dport 8388 counter reject with tcp reset
 nft add rule inet filter input iifname != "eth0" udp dport 8388 counter reject
 
