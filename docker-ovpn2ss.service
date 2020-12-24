@@ -3,6 +3,7 @@ Description=Docker ovpn2ss
 After=docker.service
 
 [Service]
+Environment=HOME=/root
 ExecStart=/usr/bin/env docker run -p 8388:8388/tcp -p 8388:8388/udp -p 127.0.0.1:8080:8080/tcp -p [::1]:8080:8080/tcp --cap-add=NET_ADMIN --cap-add=SYS_ADMIN --device=/dev/net/tun --name ovpn2ss --rm --sysctl net.ipv4.tcp_congestion_control=bbr --sysctl net.ipv4.tcp_notsent_lowat=16384 ovpn2ss
 ExecStop=/usr/bin/env docker stop ovpn2ss
 Restart=always
