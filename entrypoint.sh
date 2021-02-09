@@ -14,7 +14,7 @@ then
 fi
 if [ -n "$GATEWAY_IPv6" ]
 then
-    ip -4 route add default $GATEWAY_IPv6 dev eth0 table 8388
+    ip -6 route add default $GATEWAY_IPv6 dev eth0 table 8388
     ip -6 rule add ipproto udp sport 8388 table 8388 priority 8388
     ip -6 rule add fwmark 0x8388 table 8388 priority 8389
 fi
