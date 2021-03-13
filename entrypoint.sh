@@ -4,7 +4,7 @@ GATEWAY_IPv4="$(ip -4 route get 192.0.2.1 dev eth0 | grep -o 'via\s\S*')"
 GATEWAY_IPv6="$(ip -6 route get 2001:db8::1 dev eth0 | grep -o 'via\s\S*')"
 
 # Assume we connect to the VPN server through an IPv4 connection,
-# Disable IPv6 outside VPN connection to prevent leaking.
+# Disable IPv6 outside the VPN connection to prevent leaking.
 # If we connect to the VPN server through IPv6, change "-6" to "-4".
 ip -6 route flush table main
 
